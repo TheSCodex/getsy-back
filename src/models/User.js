@@ -18,7 +18,7 @@ const User = connection.define(
       allowNull: false,
     },
     phone_number: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         allowNull: false,
     },
     last_login_time: {

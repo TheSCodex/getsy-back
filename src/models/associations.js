@@ -13,8 +13,8 @@ function setupAssociations() {
   User.belongsTo(Role, { foreignKey: "roleId" });
 
   //RESTAURANT-ADMIN ASSOCIATION
-  Restaurant.hasOne(User, { foreignKey: "adminId" });
-  User.belongsTo(Restaurant, { foreignKey: "adminId" });
+  Restaurant.belongsTo(User, { foreignKey: "adminId" });
+  User.hasOne(Restaurant, { foreignKey: "adminId" });
 
   //RESTAURANT-RESERVATION ASSOCIATION
   Restaurant.hasMany(Reservation, { foreignKey: "restaurantId" });

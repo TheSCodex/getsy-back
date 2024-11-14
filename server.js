@@ -41,6 +41,8 @@ app.use((err, req, res, next) => {
 
 app.use("/getsy-back", userRoutes);
 
+setupAssociations();
+
 const PORT = process.env.PORT || 8080;
 
 async function syncTables() {
@@ -54,7 +56,6 @@ async function syncTables() {
     await Review.sync();
     await RestaurantEvent.sync();
     console.log('All tables synced successfully.');
-    setupAssociations();
   } catch (error) {
     console.error('Error syncing tables:', error);
   }
