@@ -38,12 +38,12 @@ function setupAssociations() {
 
   //RESTAURANT-EVENT ASSOCIATION
   Restaurant.belongsToMany(Event, {
-    through: EventRestaurant,
+    through: RestaurantEvent,
     as: "events",
     onDelete: "CASCADE",
   });
   Event.belongsToMany(Restaurant, {
-    through: EventRestaurant,
+    through: RestaurantEvent,
     as: "restaurants",
     onDelete: "CASCADE",
   });

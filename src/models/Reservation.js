@@ -37,7 +37,7 @@ const Reservation = connection.define(
       allowNull: false,
     },
     pax: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     status: {
