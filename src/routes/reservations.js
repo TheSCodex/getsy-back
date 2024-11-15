@@ -9,3 +9,5 @@ reservationRoutes.post('/reservations/create', controller.createReservation);
 reservationRoutes.post('/reservations/:id/update', controller.updateReservation);
 reservationRoutes.delete('/reservations/:id/delete', controller.deleteReservation);
 reservationRoutes.put('/reservations/:id/update-status', controller.setReservationStatus);
+
+module.exports = reservationRoutes;
