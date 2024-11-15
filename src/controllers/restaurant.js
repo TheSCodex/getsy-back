@@ -48,7 +48,7 @@ const createRestaurant = async (req, res) => {
       maxPrice,
       zipCode,
       capacity,
-      category: category.join(","),
+      category,
       logo,
       banner,
       adminId,
@@ -108,45 +108,30 @@ const updateRestaurant = async (req, res) => {
     banner,
     adminId,
   } = req.body;
-  if (
-    !name ||
-    !phoneNumber ||
-    !email ||
-    !address ||
-    !minPrice ||
-    !maxPrice ||
-    !zipCode ||
-    !capacity ||
-    !category ||
-    !adminId
-  ) {
-    return res
-      .status(400)
-      .json({ message: "At least one item is necessary to update" });
-  }
-  const updates = {};
-  if (name) updates.name = name;
-  if (phoneNumber) updates.phoneNumber = phoneNumber;
-  if (email) updates.email = email;
-  if (address) updates.address = address;
-  if (minPrice) updates.minPrice = minPrice;
-  if (maxPrice) updates.maxPrice = maxPrice;
-  if (zipCode) updates.zipCode = zipCode;
-  if (capacity) updates.capacity = capacity;
-  if (category) updates.category = category.join(",");
-  if (logo) updates.logo = logo;
-  if (banner) updates.banner = banner;
-  if (adminId) updates.adminId = adminId;
+
   try {
-    const [updated] = await Restaurant.update(updates, {
-      where: { id: req.params.id },
-    });
-    if (updated) {
-      const updatedRestaurant = await Restaurant.findByPk(req.params.id);
-      return res.status(200).json(updatedRestaurant);
-    } else {
+    const restaurant = await Restaurant.findByPk(req.params.id);
+
+    if (!restaurant) {
       return res.status(404).json({ message: "Restaurant not found" });
     }
+
+    await restaurant.update({
+      name: name || restaurant.name,
+      phoneNumber: phoneNumber || restaurant.phoneNumber,
+      email: email || restaurant.email,
+      address: address || restaurant.address,
+      minPrice: minPrice || restaurant.minPrice,
+      maxPrice: maxPrice || restaurant.maxPrice,
+      zipCode: zipCode || restaurant.zipCode,
+      capacity: capacity || restaurant.capacity,
+      category: category || restaurant.category,
+      logo: logo || restaurant.logo,
+      banner: banner || restaurant.banner,
+      adminId: adminId || restaurant.adminId,
+    });
+
+    return res.status(200).json(restaurant);
   } catch (error) {
     console.error("Error updating restaurant:", error);
     return res
@@ -161,7 +146,7 @@ const deleteRestaurant = async (req, res) => {
       where: { id: req.params.id },
     });
     if (deleted) {
-      return res.status(204).json();
+      return res.status(204).json({message: "Restaurant deleted successfully"});
     } else {
       return res.status(404).json({ message: "Restaurant not found" });
     }
@@ -210,12 +195,12 @@ const getRestaurantsByCategory = async (req, res) => {
   };
   
   const getRestaurantsByPriceRange = async (req, res) => {
-    const { minPrice, maxPrice } = req.query;
+    const { minPrice, maxPrice } = req.body;
     try {
       const restaurants = await Restaurant.findAll({
         where: {
-          minPrice: { [Op.gte]: minPrice },
-          maxPrice: { [Op.lte]: maxPrice }
+          minPrice: minPrice,
+          maxPrice: maxPrice
         }
       });
       if (restaurants.length === 0) {
@@ -229,14 +214,14 @@ const getRestaurantsByCategory = async (req, res) => {
   };
   
   const searchRestaurants = async (req, res) => {
-    const { query } = req.query;
+    const { name, address, category } = req.query;
     try {
       const restaurants = await Restaurant.findAll({
         where: {
           [Op.or]: [
-            { name: { [Op.like]: `%${query}%` } },
-            { address: { [Op.like]: `%${query}%` } },
-            { category: { [Op.like]: `%${query}%` } }
+            { name: { [Op.like]: `%${name}%` } },
+            { address: { [Op.like]: `%${address}%` } },
+            { category: { [Op.like]: `%${category}%` } }
           ]
         }
       });

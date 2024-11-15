@@ -12,6 +12,7 @@ const Restaurant = require('./src/models/Restaurant.js');
 const User = require('./src/models/User.js');
 const Role = require('./src/models/Role.js');
 const restaurantRoutes = require('./src/routes/restaurant.js');
+const reservationRoutes = require('./src/routes/reservations.js');
 
 dotenv.config();
 
@@ -40,7 +41,7 @@ app.use((err, req, res, next) => {
   res.status(500).send("Something went wrong");
 });
 
-app.use("/getsy-back", userRoutes, restaurantRoutes);
+app.use("/getsy-back", userRoutes, reservationRoutes, restaurantRoutes);
 
 setupAssociations();
 
