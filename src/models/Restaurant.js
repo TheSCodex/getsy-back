@@ -10,7 +10,7 @@ const Restaurant = connection.define(
       unique: true,
     },
     phoneNumber: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       allowNull: false,
     },
     email: {
