@@ -22,7 +22,7 @@ const Reservation = connection.define(
     },
     eventId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: "events",
         key: "id",

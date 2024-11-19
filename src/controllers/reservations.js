@@ -1,7 +1,7 @@
 const Reservation = require('../models/Reservation.js');
 
 const getReservationById = async (req, res) => {
-    const { id: reservationId, fk_user } = req.params;
+    const { id: reservationId, userId } = req.params;
 
     if (!reservationId) {
         return res.status(400).json({ error: 'No id was provided for the reservation' });
@@ -9,7 +9,7 @@ const getReservationById = async (req, res) => {
 
     try {
         const reservation = await Reservation.findOne({
-            where: { id: reservationId, fk_user: fk_user }
+            where: { id: reservationId, userId: userId }
         });
 
         if (!reservation) {
@@ -23,14 +23,14 @@ const getReservationById = async (req, res) => {
     }
 }
 const getAllReservationsByUser = async (req, res) => {
-    const { fk_user } = req.params;
+    const { userId } = req.params;
     const { status } = req.query;
 
-    if (!fk_user) {
+    if (!userId) {
         return res.status(400).json({ error: 'No user id was provided' });
     }
 
-    const whereClause = { fk_user: fk_user };
+    const whereClause = { userId: userId };
 
     if (status) {
         whereClause.status = status;
@@ -49,9 +49,9 @@ const getAllReservationsByUser = async (req, res) => {
 };
 
 const createReservation = async (req, res) => {
-    const { fk_restaurant, fk_user, fk_event = '',  date, time, pax, status, notes = '' } = req.body;
+    const { restaurantId, userId, eventId = null,  date, time, pax, status, notes = '' } = req.body;
 
-    const requiredFields = { fk_restaurant, fk_user, date, time, pax, status };
+    const requiredFields = { restaurantId, userId, date, time, pax, status };
     
     for (const [field, value] of Object.entries(requiredFields)) {
         if (!value) {
@@ -61,7 +61,7 @@ const createReservation = async (req, res) => {
 
     try {
         const reservation = await Reservation.create({
-            fk_restaurant, fk_user, fk_event, date, time, pax, status, notes
+            restaurantId, userId, eventId, date, time, pax, status, notes
         });
 
         return res.status(201).json(reservation);
@@ -73,7 +73,7 @@ const createReservation = async (req, res) => {
 
 const updateReservation = async (req, res) => {
     const { id: reservationId } = req.params;
-    const { fk_restaurant, fk_user, fk_event, date, time, pax, status, notes } = req.body;
+    const { userId, eventId, date, time, pax, status, notes } = req.body;
 
     if (!reservationId) {
         return res.status(400).json({ error: 'No id was provided for the reservation' });
@@ -81,7 +81,7 @@ const updateReservation = async (req, res) => {
 
     try {
         const reservation = await Reservation.findOne({
-            where: { id: reservationId, fk_user: fk_user }
+            where: { id: reservationId, userId: userId }
         });
 
         if (!reservation) {
@@ -89,9 +89,8 @@ const updateReservation = async (req, res) => {
         }
 
         await reservation.update({
-            fk_restaurant: fk_restaurant || reservation.fk_restaurant,
-            fk_user: fk_user || reservation.fk_user,
-            fk_event: fk_event || reservation.fk_event,
+            userId: userId || reservation.userId,
+            eventId: eventId || reservation.eventId,
             date: date || reservation.date,
             time: time || reservation.time,
             pax: pax || reservation.pax,
@@ -108,7 +107,7 @@ const updateReservation = async (req, res) => {
 
 const deleteReservation = async (req, res) => {
     const { id: reservationId } = req.params;
-    const { fk_user } = req.body;
+    const { userId } = req.body;
 
     if (!reservationId) {
         return res.status(400).json({ error: 'No id was provided for the reservation' });
@@ -116,7 +115,7 @@ const deleteReservation = async (req, res) => {
 
     try {
         const reservation = await Reservation.findOne({
-            where: { id: reservationId, fk_user: fk_user }
+            where: { id: reservationId, userId: userId }
         });
 
         if (!reservation) {
@@ -134,7 +133,7 @@ const deleteReservation = async (req, res) => {
 
 const setReservationStatus = async (req, res) => {
     const { id: reservationId } = req.params;
-    const { status, fk_user } = req.body;
+    const { status, userId } = req.body;
 
     if (!reservationId) {
         return res.status(400).json({ error: 'No id was provided for the reservation' });
@@ -142,7 +141,7 @@ const setReservationStatus = async (req, res) => {
 
     try {
         const reservation = await Reservation.findOne({
-            where: { id: reservationId, fk_user: fk_user }
+            where: { id: reservationId, userId: userId }
         });
 
         if (!reservation) {
