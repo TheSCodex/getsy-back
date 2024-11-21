@@ -18,6 +18,10 @@ const Restaurant = connection.define(
       allowNull: false,
       unique: true,
     },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
     address: {
       type: DataTypes.STRING,
       allowNull: false,
