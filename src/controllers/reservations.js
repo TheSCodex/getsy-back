@@ -48,6 +48,32 @@ const getAllReservationsByUser = async (req, res) => {
     }
 };
 
+const getAllReservationsByRestaurant = async (req, res) => {
+    const { restaurantId } = req.params;
+    const { status } = req.query;
+
+    if (!restaurantId) {
+        return res.status(400).json({ error: 'No restaurant id was provided' });
+    }
+
+    const whereClause = { restaurantId: restaurantId };
+
+    if (status) {
+        whereClause.status = status;
+    }
+
+    try {
+        const reservations = await Reservation.findAll({
+            where: whereClause
+        });
+
+        return res.status(200).json(reservations);
+    } catch (error) {
+        console.error('Error while getting the reservations', error);
+        return res.status(500).json({ error: 'Error while getting the reservations' });
+    }
+};
+
 const createReservation = async (req, res) => {
     const { restaurantId, userId, eventId = null,  date, time, pax, status, notes = '' } = req.body;
 
@@ -160,6 +186,7 @@ const setReservationStatus = async (req, res) => {
 module.exports = {
     getReservationById,
     getAllReservationsByUser,
+    getAllReservationsByRestaurant,
     createReservation,
     updateReservation,
     deleteReservation,
