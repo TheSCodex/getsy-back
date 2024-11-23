@@ -135,7 +135,7 @@ const getAllUsers = async (req, res) => {
 };
 
 const getUserById = async (req, res) => {
-  const userId = req.body.id;
+  const userId = req.params.id;
   if (!userId) {
     return res
       .status(400)
@@ -157,6 +157,7 @@ const getUserById = async (req, res) => {
     return res.status(500).json({ message: "Unable to search for user" });
   }
 };
+
 
 const createUser = async (req, res) => {
   const { name, email, password, roleId, phone_number } = req.body;

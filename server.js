@@ -33,7 +33,8 @@ app.use(
       }
     },
     methods: "GET, POST, PUT, DELETE, PATCH",
-    allowedHeaders: "Content-Type",
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
 
@@ -46,7 +47,7 @@ app.use("/getsy-back", userRoutes, reservationRoutes, restaurantRoutes, eventRou
 
 setupAssociations();
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT;
 
 async function syncTables() {
   try {
