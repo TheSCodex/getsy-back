@@ -200,8 +200,8 @@ const createUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const { id, name, email, password, phone_number } = req.body;
-  if (!id || (!name && !email && !password && !phone_number)) {
+  const { id, name, email, password, phone_number, avatar } = req.body;
+  if (!id || (!name && !email && !password && !phone_number && !avatar)) {
     return res
       .status(400)
       .json({ message: "Id and at least one field to update are required" });
@@ -215,6 +215,7 @@ const updateUser = async (req, res) => {
     if (name) updates.name = name;
     if (email) updates.email = email;
     if (phone_number) updates.phone_number = phone_number;
+    if (avatar) updates.avatar = avatar;
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10);
       updates.password = hashedPassword;
