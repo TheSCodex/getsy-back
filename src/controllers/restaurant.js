@@ -77,7 +77,14 @@ const createRestaurant = async (req, res) => {
 
 const getAllRestaurants = async (req, res) => {
   try {
-    const restaurants = await Restaurant.findAll();
+    const restaurants = await Restaurant.findAll({
+      include: [
+        {
+          model: Schedule,
+          attributes: ["working_days"],
+        }
+      ],
+    });
     if (restaurants.length === 0) {
       return res.status(404).json({ message: "No restaurants found" });
     }
@@ -92,7 +99,14 @@ const getAllRestaurants = async (req, res) => {
 
 const getRestaurantById = async (req, res) => {
   try {
-    const restaurant = await Restaurant.findByPk(req.params.id);
+    const restaurant = await Restaurant.findByPk(req.params.id, {
+      include: [
+        {
+          model: Schedule,
+          attributes: ["working_days"],
+        }
+      ]
+    });
     if (restaurant) {
       return res.status(200).json(restaurant);
     } else {

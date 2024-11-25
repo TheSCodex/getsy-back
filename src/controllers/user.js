@@ -161,6 +161,7 @@ const getUserById = async (req, res) => {
 
 const createUser = async (req, res) => {
   const { name, email, password, roleId, phone_number } = req.body;
+  console.log(req.body);
   const saltRounds = 10;
   if (!password || !email || !name || !phone_number) {
     return res
