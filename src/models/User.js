@@ -58,6 +58,10 @@ const User = connection.define(
       type: DataTypes.DATE,
       allowNull: true,
     },
+    avatar: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    }
   },
   {
     timestamps: true,
