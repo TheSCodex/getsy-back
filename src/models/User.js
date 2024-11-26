@@ -46,6 +46,10 @@ const User = connection.define(
       defaultValue: 2,
       allowNull: false,
     },
+    avatar: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     recovery_code: {
       type: DataTypes.STRING(4),
       allowNull: true,
